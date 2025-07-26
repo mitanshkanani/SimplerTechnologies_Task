@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -32,11 +32,18 @@ import {
   CardTitle,
   CardDescription,
 } from "../../components/ui/card";
-
+import { Particles } from "../../components/magicui/Particles";
+import { useTheme } from "../../contexts/ThemeProvider";
+import AnimatedBackground from "../../components/ui/AnimatedBackground"; // Fixed import path
 const formSchema = z.object({
-  fullName: z.string().min(2, {
-    message: "Full name must be at least 2 characters.",
-  }),
+  fullName: z
+    .string()
+    .min(2, {
+      message: "Full name must be at least 2 characters.",
+    })
+    .regex(/^[A-Za-z\s]+$/, {
+      message: "Full name can only contain letters and spaces.",
+    }),
   email: z.string().regex(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, {
     message: "Please enter a valid email address",
   }),
@@ -51,6 +58,13 @@ const formSchema = z.object({
 });
 
 const SignUp = () => {
+  const { theme } = useTheme();
+  const [particleColor, setParticleColor] = useState("#000000");
+
+  useEffect(() => {
+    setParticleColor(theme === "dark" ? "#ffffff" : "#000000");
+  }, [theme]);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -85,129 +99,267 @@ const SignUp = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="container flex min-h-screen items-center justify-center px-4 py-8"
+      style={{
+        position: "relative",
+        minHeight: "100vh",
+        width: "100%",
+        overflow: "hidden",
+        backgroundColor: theme === "dark" ? "#09090b" : "#ffffff",
+      }}
     >
-      <Card className="w-full max-w-[450px] shadow-lg">
-        <CardHeader className="space-y-1">
-          <div className="flex items-center justify-center space-x-2">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              <UserPlus className="h-8 w-8 text-primary" />
-            </motion.div>
-            <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
-          </div>
-          <CardDescription className="text-center">
-            Enter your details below to create your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="fullName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Full Name</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <User className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          className="pl-8"
-                          placeholder="John Doe"
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Mail className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          className={`pl-8 ${
-                            email && !isValidEmail
-                              ? "border-red-500 focus-visible:ring-red-500"
-                              : ""
-                          }`}
-                          placeholder="name@example.com"
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    {email && !isValidEmail && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-xs font-medium text-red-500 mt-2"
-                      >
-                        Please enter a valid email address
-                      </motion.p>
-                    )}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <KeyRound className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                        <Input className="pl-8" type="password" {...field} />
-                      </div>
-                    </FormControl>
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      className="space-y-2 text-sm"
-                    >
-                      <div className="grid grid-cols-1 gap-2 pt-2">
-                        <RequirementItem
-                          text="At least 8 characters"
-                          isMet={hasMinLength}
-                        />
-                        <RequirementItem
-                          text="Contains uppercase letter"
-                          isMet={hasUpperCase}
-                        />
-                        <RequirementItem
-                          text="Contains lowercase letter"
-                          isMet={hasLowerCase}
-                        />
-                        <RequirementItem
-                          text="Contains number"
-                          isMet={hasNumber}
-                        />
-                      </div>
-                    </motion.div>
-                    <FormMessage className="text-red-500 font-medium" />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full">
-                Create Account <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </form>
-          </Form>
+      <div style={{ position: "absolute", inset: 0, zIndex: 1 }}>
+        <AnimatedBackground />
+      </div>
+      <Particles
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 2,
+        }}
+        quantity={100}
+        staticity={50}
+        color={particleColor}
+        ease={80}
+        refresh
+      />
 
-        </CardContent>
-      </Card>
-      <Toaster position="top-right" />
+      <div
+        style={{
+          position: "relative",
+          zIndex: 3,
+          display: "flex",
+          minHeight: "100vh",
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "2rem 1rem",
+        }}
+      >
+        <Card
+          style={{
+            width: "100%",
+            maxWidth: "450px",
+            borderRadius: "0.5rem",
+            backgroundColor:
+              theme === "dark"
+                ? "rgba(24, 24, 27, 0.7)"
+                : "rgba(255, 255, 255, 0.7)",
+            backdropFilter: "blur(8px)",
+            boxShadow:
+              theme === "dark"
+                ? "0 4px 6px rgba(0, 0, 0, 0.3)"
+                : "0 4px 6px rgba(0, 0, 0, 0.1)",
+            color: theme === "dark" ? "#ffffff" : "#09090b",
+          }}
+        >
+          <CardHeader style={{ marginBottom: "1rem" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                <UserPlus
+                  style={{
+                    height: "2rem",
+                    width: "2rem",
+                    color: "var(--primary)",
+                  }}
+                />
+              </motion.div>
+              <CardTitle
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: "bold",
+                  color: theme === "dark" ? "#ffffff" : "#09090b",
+                }}
+              >
+                Create Account
+              </CardTitle>
+            </div>
+            <CardDescription
+              style={{
+                textAlign: "center",
+                color: theme === "dark" ? "#a1a1aa" : "#71717a",
+              }}
+            >
+              Enter your details below to create your account
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1.5rem",
+                }}
+              >
+                <FormField
+                  control={form.control}
+                  name="fullName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Full Name</FormLabel>
+                      <FormControl>
+                        <div style={{ position: "relative" }}>
+                          <User
+                            style={{
+                              position: "absolute",
+                              left: "0.5rem",
+                              top: "0.625rem",
+                              height: "1rem",
+                              width: "1rem",
+                              color: "var(--muted-foreground)",
+                            }}
+                          />
+                          <Input
+                            style={{ paddingLeft: "2rem" }}
+                            placeholder="John Doe"
+                            {...field}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <div style={{ position: "relative" }}>
+                          <Mail
+                            style={{
+                              position: "absolute",
+                              left: "0.5rem",
+                              top: "0.625rem",
+                              height: "1rem",
+                              width: "1rem",
+                              color: "var(--muted-foreground)",
+                            }}
+                          />
+                          <Input
+                            style={{
+                              paddingLeft: "2rem",
+                              borderColor:
+                                email && !isValidEmail ? "#ef4444" : undefined,
+                              outline:
+                                email && !isValidEmail
+                                  ? "2px solid #ef4444"
+                                  : undefined,
+                            }}
+                            placeholder="name@example.com"
+                            {...field}
+                          />
+                        </div>
+                      </FormControl>
+                      {email && !isValidEmail && (
+                        <motion.p
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          style={{
+                            fontSize: "0.75rem",
+                            fontWeight: 500,
+                            color: "#ef4444",
+                            marginTop: "0.5rem",
+                          }}
+                        >
+                          Please enter a valid email address
+                        </motion.p>
+                      )}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <div style={{ position: "relative" }}>
+                          <KeyRound
+                            style={{
+                              position: "absolute",
+                              left: "0.5rem",
+                              top: "0.625rem",
+                              height: "1rem",
+                              width: "1rem",
+                              color: "var(--muted-foreground)",
+                            }}
+                          />
+                          <Input
+                            style={{ paddingLeft: "2rem" }}
+                            type="password"
+                            {...field}
+                          />
+                        </div>
+                      </FormControl>
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "1fr",
+                          gap: "0.5rem",
+                          paddingTop: "0.5rem",
+                        }}
+                      >
+                        <div className="grid grid-cols-1 gap-2 pt-2">
+                          <RequirementItem
+                            text="At least 8 characters"
+                            isMet={hasMinLength}
+                          />
+                          <RequirementItem
+                            text="Contains uppercase letter"
+                            isMet={hasUpperCase}
+                          />
+                          <RequirementItem
+                            text="Contains lowercase letter"
+                            isMet={hasLowerCase}
+                          />
+                          <RequirementItem
+                            text="Contains number"
+                            isMet={hasNumber}
+                          />
+                        </div>
+                      </motion.div>
+                      <FormMessage className="text-red-500 font-medium" />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="submit"
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  Create Account{" "}
+                  <ArrowRight style={{ height: "1rem", width: "1rem" }} />
+                </Button>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+      </div>
+      <Toaster position="top-right" theme={theme} />
     </motion.div>
   );
 };
@@ -216,12 +368,19 @@ const RequirementItem = ({ text, isMet }) => (
   <motion.div
     initial={{ opacity: 0, x: -20 }}
     animate={{ opacity: 1, x: 0 }}
-    className={`flex items-center space-x-2 ${
-      isMet ? "text-green-500" : "text-red-500"
-    }`}
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "0.5rem",
+      color: isMet ? "#22c55e" : "#ef4444",
+    }}
   >
-    {isMet ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
-    <span className="text-sm">{text}</span>
+    {isMet ? (
+      <Check style={{ height: "1rem", width: "1rem" }} />
+    ) : (
+      <X style={{ height: "1rem", width: "1rem" }} />
+    )}
+    <span style={{ fontSize: "0.875rem" }}>{text}</span>
   </motion.div>
 );
 

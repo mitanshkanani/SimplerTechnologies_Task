@@ -7,7 +7,7 @@ import {
   AvatarImage,
 } from "../../../components/ui/avatar";
 import { Badge } from "../../../components/ui/badge";
-import { Mail, User, MoreVertical } from "lucide-react";
+import { Mail, MoreVertical } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,17 +23,17 @@ const UserCard = ({ name, email, imageUrl }) => {
     .toUpperCase();
 
   return (
-    <motion.div className="ml-4">
-      <Card className="w-full max-w-md bg-gradient-to-br from-background/80 to-secondary/20 backdrop-blur-xl border-2 border-muted/30 transition-all duration-300">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+    <motion.div className="p-2">
+      <Card className="overflow-hidden bg-white/5 backdrop-blur-sm border border-white/10 shadow-lg hover:shadow-xl transition-all duration-300 rounded-lg max-w-sm">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
               <motion.div
                 className="relative"
-                whileHover={{ scale: 1.1 }}
-                transition={{ type: "spring", stiffness: 400 }}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300 }}
               >
-                <Avatar className="h-16 w-16 ring-2 ring-primary/40 ring-offset-2 ring-offset-background hover:ring-primary transition-all duration-300">
+                <Avatar className="h-12 w-12 ring-2 ring-primary/30 ring-offset-2 ring-offset-background hover:ring-primary/50 transition-all duration-300">
                   {imageUrl ? (
                     <AvatarImage
                       src={imageUrl}
@@ -41,37 +41,39 @@ const UserCard = ({ name, email, imageUrl }) => {
                       className="object-cover"
                     />
                   ) : (
-                    <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40 text-primary font-bold text-xl">
+                    <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40 text-lg font-bold">
                       {initials || "U"}
                     </AvatarFallback>
                   )}
                   <motion.span
-                    className="absolute bottom-0 right-0 h-4 w-4 rounded-full bg-green-500 ring-2 ring-background"
+                    className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-background"
                     animate={{ scale: [1, 1.2, 1] }}
                     transition={{ repeat: Infinity, duration: 2 }}
                   />
                 </Avatar>
               </motion.div>
-              <div className="space-y-2">
-                <h3 className="font-medium flex items-center gap-2">
-                  <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base font-semibold bg-gradient-to-r from-primary to-pink-500 bg-clip-text text-transparent">
                     {name}
-                  </span>
+                  </h3>
                   <Badge
                     variant="secondary"
-                    className="text-xs font-semibold animate-pulse"
+                    className="bg-emerald-500/10 text-emerald-500 px-2 py-0.5 text-[10px]"
                   >
                     Active
                   </Badge>
-                </h3>
-                <motion.p
+                </div>
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="text-sm text-muted-foreground flex items-center gap-2 hover:text-primary transition-colors duration-300"
+                  className="flex items-center gap-1.5 text-gray-400 hover:text-primary transition-colors group"
                 >
-                  <Mail className="h-4 w-4" />
-                  {email}
-                </motion.p>
+                  <Mail className="h-3.5 w-3.5 group-hover:text-primary transition-colors" />
+                  <span className="text-xs font-medium truncate max-w-[180px]">
+                    {email}
+                  </span>
+                </motion.div>
               </div>
             </div>
             <DropdownMenu>
@@ -79,22 +81,22 @@ const UserCard = ({ name, email, imageUrl }) => {
                 <motion.button
                   whileHover={{ rotate: 90 }}
                   transition={{ type: "spring", stiffness: 400 }}
-                  className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-primary/10 transition-colors duration-300"
+                  className="h-8 w-8 rounded-full flex items-center justify-center hover:bg-white/5 active:bg-white/10 transition-all"
                 >
-                  <MoreVertical className="h-5 w-5" />
+                  <MoreVertical className="h-4 w-4" />
                 </motion.button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="bg-background/80 backdrop-blur-lg border-primary/20"
+                className="bg-background/95 backdrop-blur-xl border-white/10 rounded-lg shadow-xl w-36"
               >
-                <DropdownMenuItem className="hover:bg-primary/10">
+                <DropdownMenuItem className="text-sm hover:bg-white/5 focus:bg-white/5 rounded-md transition-colors">
                   View Profile
                 </DropdownMenuItem>
-                <DropdownMenuItem className="hover:bg-primary/10">
+                <DropdownMenuItem className="text-sm hover:bg-white/5 focus:bg-white/5 rounded-md transition-colors">
                   Send Message
                 </DropdownMenuItem>
-                <DropdownMenuItem className="text-red-500 hover:bg-red-500/10">
+                <DropdownMenuItem className="text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 focus:bg-red-500/10 rounded-md transition-colors">
                   Remove
                 </DropdownMenuItem>
               </DropdownMenuContent>

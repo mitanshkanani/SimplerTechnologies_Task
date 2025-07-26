@@ -21,17 +21,93 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../../../lib/utils"; // if you're using clsx or similar
 
 const navLinks = [
-  { to: "/", label: "Home", icon: <Home size={18} className="mr-2" /> },
-  { to: "/about", label: "About", icon: <Info size={18} className="mr-2" /> },
+  {
+    to: "/",
+    label: "Home",
+    icon: (
+      <motion.div
+        whileHover={{
+          scale: 1.05,
+          color: "hsl(var(--primary))",
+        }}
+        animate={{
+          y: [0, -1, 0],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      >
+        <Home size={18} className="mr-2" />
+      </motion.div>
+    ),
+  },
+  {
+    to: "/about",
+    label: "About",
+    icon: (
+      <motion.div
+        whileHover={{
+          scale: 1.05,
+          color: "hsl(var(--primary))",
+        }}
+        animate={{
+          rotate: [-2, 2, -2],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      >
+        <Info size={18} className="mr-2" />
+      </motion.div>
+    ),
+  },
   {
     to: "/contact",
     label: "Contact",
-    icon: <Mail size={18} className="mr-2" />,
+    icon: (
+      <motion.div
+        whileHover={{
+          scale: 1.05,
+          color: "hsl(var(--primary))",
+        }}
+        animate={{
+          scale: [1, 1.02, 1],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      >
+        <Mail size={18} className="mr-2" />
+      </motion.div>
+    ),
   },
   {
     to: "/signup",
     label: "Sign Up",
-    icon: <UserPlus size={18} className="mr-2" />,
+    icon: (
+      <motion.div
+        whileHover={{
+          scale: 1.05,
+          color: "hsl(var(--primary))",
+        }}
+        animate={{
+          x: [-1, 1, -1],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      >
+        <UserPlus size={18} className="mr-2" />
+      </motion.div>
+    ),
   },
 ];
 
@@ -105,22 +181,16 @@ const NavBar = () => {
               key={link.to}
               variants={item}
               whileHover={{
-                scale: 1.1,
-                y: -5,
-                transition: { type: "spring", stiffness: 300 },
+                scale: 1.05,
+                transition: { type: "spring", stiffness: 200 },
               }}
               className="relative"
             >
               <Lk
                 to={link.to}
-                className="flex items-center px-4 py-2 rounded-lg hover:bg-accent hover:text-primary transition-all font-medium"
+                className="flex items-center px-4 py-2 rounded-lg hover:bg-accent hover:text-primary transition-all duration-300 font-medium"
               >
-                <motion.span
-                  animate={{ rotate: [0, 5, 0] }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                >
-                  {link.icon}
-                </motion.span>
+                {link.icon}
                 {link.label}
               </Lk>
             </motion.li>
@@ -128,8 +198,8 @@ const NavBar = () => {
 
           {/* Enhanced theme toggle animation */}
           <motion.li
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9, rotate: -180 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 15 }}
             className="ml-2"
           >
@@ -144,10 +214,17 @@ const NavBar = () => {
                 {theme === "light" ? (
                   <motion.span
                     key="moon"
-                    initial={{ scale: 0, rotate: 90 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    exit={{ scale: 0, rotate: -90 }}
-                    transition={{ duration: 0.4, type: "spring" }}
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    whileHover={{
+                      scale: 1.05,
+                      color: "hsl(var(--primary))",
+                    }}
+                    transition={{
+                      duration: 0.2,
+                      ease: "easeInOut",
+                    }}
                   >
                     <Moon size={20} />
                   </motion.span>
@@ -171,7 +248,14 @@ const NavBar = () => {
         <div className="md:hidden flex items-center">
           <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger asChild>
-              <motion.div whileTap={{ scale: 0.9 }}>
+              <motion.div
+                whileTap={{ scale: 0.95 }}
+                whileHover={{
+                  scale: 1.05,
+                  color: "hsl(var(--primary))",
+                }}
+                transition={{ duration: 0.2 }}
+              >
                 <Button variant="ghost" size="icon" aria-label="Open menu">
                   <Menu size={26} />
                 </Button>
