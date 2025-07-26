@@ -32,9 +32,9 @@ import {
   CardTitle,
   CardDescription,
 } from "../../components/ui/card";
-import { Particles } from "../../components/magicui/Particles";
+import { Particles } from "../../components/magicui/particles";
 import { useTheme } from "../../contexts/ThemeProvider";
-import AnimatedBackground from "../../components/ui/AnimatedBackground"; // Fixed import path
+import AnimatedBackground from "../../components/ui/AnimatedBackground"; 
 const formSchema = z.object({
   fullName: z
     .string()
